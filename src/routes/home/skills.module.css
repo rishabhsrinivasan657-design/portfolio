@@ -1,0 +1,256 @@
+@layer layout {
+  .skills {
+    width: 100%;
+    padding-top: var(--space5XL);
+    padding-bottom: var(--space5XL);
+    position: relative;
+    z-index: var(--zIndex1);
+
+    @media (--mediaTablet) {
+      padding-top: var(--space4XL);
+      padding-bottom: var(--space4XL);
+    }
+  }
+
+  .content {
+    max-width: var(--maxWidthL);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .header {
+    margin-bottom: var(--space3XL);
+  }
+
+  .title {
+    max-width: 18ch;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--durationM);
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* Forced line breaks on wide screens; on mobile the spans go inline so the
+     natural space between sentences survives the reflow. A <br> cannot do
+     this — hiding it removes the break AND the space. */
+  .line {
+    display: block;
+
+    @media (--mediaTablet) {
+      display: inline;
+    }
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: var(--space3XL);
+    align-items: start;
+
+    @media (--mediaLaptop) {
+      grid-template-columns: 300px 1fr;
+      gap: var(--space2XL);
+    }
+
+    @media (--mediaTablet) {
+      grid-template-columns: 100%;
+      gap: var(--space2XL);
+    }
+  }
+
+  /* ---- Category rail ----------------------------------------------------- */
+
+  .groups {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .group {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 var(--spaceM);
+    align-items: start;
+    text-align: left;
+    cursor: pointer;
+    padding: var(--spaceL) 0;
+    border-top: 1px solid var(--hairline);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationM);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--delay);
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(calc(var(--spaceM) * -1), 0, 0);
+    }
+
+    .groups[data-visible='true'] & {
+      opacity: 1;
+      transform: none;
+    }
+
+    &:last-child {
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    &[data-dimmed='true'] {
+      opacity: 0.45;
+    }
+  }
+
+  .groupCount {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    color: var(--primary);
+    letter-spacing: 0.08em;
+    padding-top: 5px;
+
+    .group[data-active='true'] & {
+      color: var(--accent);
+    }
+  }
+
+  .groupText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .groupLabel {
+    font-family: var(--displayFontStack);
+    font-size: var(--fontSizeH5);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: -0.02em;
+    color: var(--textBody);
+    transition: color var(--durationS) ease;
+    line-height: 1.2;
+
+    .group[data-active='true'] & {
+      color: var(--textTitle);
+    }
+  }
+
+  .groupCaption {
+    font-size: var(--fontSizeBodyXS);
+    color: var(--textLight);
+    line-height: 1.45;
+  }
+
+  .groupBar {
+    grid-column: 2;
+    height: 2px;
+    background: var(--hairline);
+    margin-top: var(--spaceM);
+    display: block;
+  }
+
+  .groupBarFill {
+    display: block;
+    height: 100%;
+    background: var(--primary);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform var(--durationXL) var(--bezierPrecision) var(--delay),
+      background var(--durationS) ease;
+
+    .groups[data-visible='true'] & {
+      transform: scaleX(var(--progress));
+    }
+
+    .group[data-active='true'] & {
+      background: var(--accent);
+    }
+  }
+
+  /* ---- Skill field ------------------------------------------------------- */
+
+  .field {
+    position: relative;
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 300ms;
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spaceS);
+  }
+
+  .skill {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoS);
+    letter-spacing: 0.02em;
+    color: var(--textBody);
+    border: 1px solid var(--hairline);
+    padding: 7px var(--spaceM);
+    opacity: 0;
+    /* Chamfer, matching the buttons */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    transition-property: opacity, color, border-color, background;
+    transition-duration: var(--durationM);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--delay);
+
+    @media (--mediaUseMotion) {
+      transition-property: opacity, transform, color, border-color, background;
+      transform: translate3d(0, var(--spaceS), 0);
+    }
+
+    .field[data-visible='true'] & {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Once the field has settled, hover feedback should be immediate rather
+       than inheriting the long stagger delay. */
+    &[data-active='true'],
+    &[data-dimmed='true'] {
+      transition-delay: 0ms;
+      transition-duration: var(--durationS);
+    }
+
+    &[data-active='true'] {
+      color: var(--textTitle);
+      border-color: var(--accent);
+      background: color-mix(in lab, var(--accent) 10%, transparent);
+    }
+
+    &[data-dimmed='true'] {
+      opacity: 0.3;
+    }
+
+    @media (--mediaMobile) {
+      font-size: var(--fontSizeMonoXS);
+      padding: 6px var(--spaceS);
+    }
+  }
+
+  .readout {
+    margin-top: var(--spaceXL);
+    padding-top: var(--spaceM);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .readoutText {
+    font-size: var(--fontSizeMonoXS);
+    letter-spacing: 0.16em;
+    color: var(--textLight);
+  }
+}

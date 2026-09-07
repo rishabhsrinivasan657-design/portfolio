@@ -1,0 +1,423 @@
+@layer layout {
+
+  /* Local for the same reason as `reveal` — see the note there. */
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+  .experience {
+    width: 100%;
+    padding-top: var(--space5XL);
+    padding-bottom: var(--space5XL);
+    position: relative;
+    z-index: var(--zIndex1);
+
+    @media (--mediaTablet) {
+      padding-top: var(--space4XL);
+      padding-bottom: var(--space4XL);
+    }
+  }
+
+  .content {
+    max-width: var(--maxWidthL);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .header {
+    margin-bottom: var(--space4XL);
+
+    @media (--mediaMobile) {
+      margin-bottom: var(--space2XL);
+    }
+  }
+
+  .title {
+    max-width: 16ch;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--durationM);
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* Forced line breaks on wide screens; on mobile the spans go inline so the
+     natural space between sentences survives the reflow. A <br> cannot do
+     this — hiding it removes the break AND the space. */
+  .line {
+    display: block;
+
+    @media (--mediaTablet) {
+      display: inline;
+    }
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: var(--space4XL);
+    align-items: start;
+
+    @media (--mediaLaptop) {
+      grid-template-columns: 230px 1fr;
+      gap: var(--space3XL);
+    }
+
+    @media (--mediaTablet) {
+      grid-template-columns: 100%;
+      gap: var(--space2XL);
+    }
+  }
+
+  /* ---- Rail -------------------------------------------------------------- */
+
+  .rail {
+    --railItemHeight: 76px;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--spaceL);
+
+    @media (--mediaTablet) {
+      flex-direction: row;
+      overflow-x: auto;
+      padding-left: 0;
+      padding-bottom: var(--spaceM);
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  .railLine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--hairline);
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform var(--durationXL) var(--bezierFastoutSlowin) 200ms;
+
+    &[data-visible='true'] {
+      transform: scaleY(1);
+    }
+
+    @media (--mediaTablet) {
+      left: 0;
+      right: 0;
+      top: auto;
+      bottom: 0;
+      width: auto;
+      height: 1px;
+      transform-origin: left;
+      transform: scaleX(0);
+
+      &[data-visible='true'] {
+        transform: scaleX(1);
+      }
+    }
+  }
+
+  /* One marker that travels, rather than a border on each item. */
+  .railMarker {
+    position: absolute;
+    left: -1px;
+    top: 0;
+    width: 3px;
+    height: var(--railItemHeight);
+    background: var(--accent);
+    transform: translate3d(0, calc(var(--index) * var(--railItemHeight)), 0);
+    transition: transform var(--durationM) var(--bezierPrecision);
+
+    @media (--mediaReduceMotion) {
+      transition: none;
+    }
+
+    @media (--mediaTablet) {
+      display: none;
+    }
+  }
+
+  .railItem {
+    height: var(--railItemHeight);
+    display: flex;
+    align-items: center;
+    gap: var(--spaceM);
+    padding: 0 var(--spaceM) 0 var(--spaceL);
+    cursor: pointer;
+    text-align: left;
+    color: var(--textLight);
+    transition-property: opacity, color;
+    transition-duration: var(--durationM);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--delay);
+    opacity: 0;
+    flex-shrink: 0;
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity, color;
+      transform: translate3d(calc(var(--spaceM) * -1), 0, 0);
+    }
+
+    &[data-visible='true'] {
+      opacity: 1;
+      transform: none;
+    }
+
+    &:hover {
+      color: var(--textBody);
+    }
+
+    &[data-active='true'] {
+      color: var(--textTitle);
+    }
+
+    @media (--mediaTablet) {
+      height: auto;
+      padding: var(--spaceM) var(--spaceL) var(--spaceM) 0;
+      border-bottom: 3px solid transparent;
+
+      &[data-active='true'] {
+        border-bottom-color: var(--accent);
+      }
+
+      @media (--mediaUseMotion) {
+        transform: translate3d(0, var(--spaceM), 0);
+      }
+    }
+  }
+
+  .railIndex {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    color: var(--primary);
+    letter-spacing: 0.08em;
+
+    .railItem[data-active='true'] & {
+      color: var(--accent);
+    }
+  }
+
+  .railText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .railCompany {
+    font-family: var(--displayFontStack);
+    font-size: var(--fontSizeBodyS);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .railPeriod {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    color: var(--textLight);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* ---- Detail panel ------------------------------------------------------ */
+
+  @keyframes panelIn {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+    }
+
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .panel {
+    opacity: 0;
+    min-width: 0;
+
+    &[data-visible='true'] {
+      animation: panelIn var(--durationL) var(--bezierPrecision) forwards;
+    }
+
+    @media (--mediaReduceMotion) {
+      &[data-visible='true'] {
+        animation: fade-in var(--durationS) ease forwards;
+      }
+    }
+  }
+
+  .panelHead {
+    margin-bottom: var(--spaceL);
+  }
+
+  .role {
+    margin-bottom: var(--spaceS);
+  }
+
+  .meta {
+    color: var(--textLight);
+    font-size: var(--fontSizeMonoS);
+    letter-spacing: 0.02em;
+  }
+
+  .context {
+    color: var(--textBody);
+    max-width: 62ch;
+    padding-bottom: var(--spaceXL);
+    margin-bottom: var(--spaceXL);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .block + .block {
+    margin-top: var(--spaceXL);
+  }
+
+  .blockRow {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: var(--space2XL);
+    margin-top: var(--spaceXL);
+
+    & .block + .block {
+      margin-top: 0;
+    }
+
+    @media (--mediaTablet) {
+      grid-template-columns: 100%;
+      gap: var(--spaceXL);
+    }
+  }
+
+  .blockLabel {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: var(--spaceM);
+  }
+
+  @keyframes itemIn {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
+    }
+
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spaceM);
+    max-width: 70ch;
+  }
+
+  .listItem {
+    position: relative;
+    padding-left: var(--spaceL);
+    font-size: var(--fontSizeBodyM);
+    line-height: var(--lineHeightBody);
+    color: var(--textBody);
+    opacity: 0;
+    animation: itemIn var(--durationL) var(--bezierPrecision) var(--delay) forwards;
+
+    /* A tick mark rather than a bullet — closer to an axis than a list. */
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 8px;
+      height: 1px;
+      background: var(--primary);
+    }
+
+    @media (--mediaReduceMotion) {
+      animation: fade-in var(--durationS) ease var(--delay) forwards;
+    }
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spaceS);
+  }
+
+  .chip {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    letter-spacing: 0.04em;
+    color: var(--textBody);
+    border: 1px solid var(--hairline);
+    padding: 6px var(--spaceS);
+    opacity: 0;
+    animation: itemIn var(--durationM) var(--bezierPrecision) var(--delay) forwards;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%);
+
+    @media (--mediaReduceMotion) {
+      animation: fade-in var(--durationS) ease var(--delay) forwards;
+    }
+  }
+
+  .results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spaceL);
+    margin: 0;
+  }
+
+  .result {
+    opacity: 0;
+    animation: itemIn var(--durationL) var(--bezierPrecision) var(--delay) forwards;
+    border-left: 2px solid var(--signal);
+    padding-left: var(--spaceM);
+
+    @media (--mediaReduceMotion) {
+      animation: fade-in var(--durationS) ease var(--delay) forwards;
+    }
+  }
+
+  .resultValue {
+    font-family: var(--displayFontStack);
+    font-size: var(--fontSizeH4);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: -0.02em;
+    color: var(--textTitle);
+    line-height: 1.1;
+  }
+
+  .resultLabel {
+    margin: 4px 0 0;
+    font-size: var(--fontSizeBodyXS);
+    color: var(--textLight);
+    line-height: 1.4;
+  }
+}

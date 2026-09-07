@@ -1,0 +1,191 @@
+@layer components {
+  .chart {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+
+    text {
+      font-family: var(--monoFontStack);
+      letter-spacing: 0.1em;
+    }
+  }
+
+  /* ---- Medallion layers -------------------------------------------------- */
+
+  .layer {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationL);
+    transition-timing-function: var(--bezierPrecision);
+    transition-delay: var(--delay);
+
+    @media (--mediaUseMotion) {
+      transition-property: opacity, transform;
+      transform: translate3d(0, 12px, 0);
+    }
+
+    .chart[data-visible='true'] & {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .layerBox {
+    fill: var(--backgroundLight);
+    stroke: var(--hairline);
+    stroke-width: 1;
+
+    .layer[data-layer='gold'] & {
+      stroke: var(--signal);
+    }
+  }
+
+  .layerLabel {
+    fill: var(--textTitle);
+    font-size: 12px;
+    font-weight: var(--fontWeightMedium);
+
+    .layer[data-layer='gold'] & {
+      fill: var(--signal);
+    }
+  }
+
+  .layerSub {
+    fill: var(--textLight);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  .tableRow {
+    fill: color-mix(in lab, var(--primary) 32%, transparent);
+
+    .layer[data-layer='gold'] & {
+      fill: color-mix(in lab, var(--signal) 42%, transparent);
+    }
+  }
+
+  .dependency {
+    stroke: color-mix(in lab, var(--primary) 40%, transparent);
+    stroke-width: 1;
+  }
+
+  .arrow {
+    fill: none;
+    stroke: color-mix(in lab, var(--primary) 60%, transparent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .note {
+    fill: var(--textLight);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+
+  .rule {
+    stroke: var(--hairline);
+    stroke-width: 1;
+  }
+
+  /* ---- Heatmap ----------------------------------------------------------- */
+
+  .trackLabel {
+    fill: var(--textLight);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .cell {
+    fill: var(--accent);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition-property: opacity;
+    transition-duration: var(--durationM);
+    transition-timing-function: var(--bezierPrecision);
+    transition-delay: var(--delay);
+
+    @media (--mediaUseMotion) {
+      transition-property: opacity, transform;
+      transform: scaleY(0.15);
+    }
+
+    .chart[data-visible='true'] & {
+      opacity: var(--opacity);
+      transform: none;
+    }
+  }
+
+  /* ---- Regimes ----------------------------------------------------------- */
+
+  .regimes,
+  .sectors {
+    opacity: 0;
+    transition: opacity var(--durationXL) ease var(--delay);
+
+    .chart[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .regimeBox {
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform var(--durationL) var(--bezierPrecision) var(--delay);
+
+    &[data-regime='0'] {
+      fill: color-mix(in lab, var(--primary) 55%, transparent);
+      stroke: var(--primary);
+    }
+
+    &[data-regime='1'] {
+      fill: color-mix(in lab, var(--accent) 45%, transparent);
+      stroke: var(--accent);
+    }
+
+    &[data-regime='2'] {
+      fill: color-mix(in lab, var(--signal) 45%, transparent);
+      stroke: var(--signal);
+    }
+
+    &[data-regime='3'] {
+      fill: color-mix(in lab, var(--text) 16%, transparent);
+      stroke: color-mix(in lab, var(--text) 40%, transparent);
+    }
+
+    .chart[data-visible='true'] & {
+      transform: none;
+    }
+  }
+
+  /* textTitle rather than background: regime D is a near-transparent tint,
+     where background-coloured text would vanish. */
+  .regimeLabel {
+    fill: var(--textTitle);
+    font-size: 11px;
+    font-weight: var(--fontWeightBold);
+    text-anchor: middle;
+  }
+
+  /* ---- Sectors ----------------------------------------------------------- */
+
+  .sectorLabel {
+    fill: var(--textLight);
+    font-size: 9px;
+  }
+
+  .sectorTrack {
+    stroke: color-mix(in lab, var(--primary) 45%, transparent);
+    stroke-width: 1.5;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset var(--duration2XL) var(--bezierPrecision) var(--delay);
+
+    .chart[data-visible='true'] & {
+      stroke-dashoffset: 0;
+    }
+  }
+}

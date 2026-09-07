@@ -1,0 +1,33 @@
+@layer layout {
+  .notFound {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .content {
+    max-width: var(--maxWidthM);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .code {
+    display: block;
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeH2);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    margin-bottom: var(--spaceL);
+  }
+
+  .title {
+    margin-bottom: var(--spaceL);
+  }
+
+  .copy {
+    margin-bottom: var(--space2XL);
+    max-width: 48ch;
+  }
+}

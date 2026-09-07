@@ -1,0 +1,26 @@
+@layer components {
+  .text {
+    /* Reserves a character of height so the line doesn't collapse while the
+       content is still an empty string on first paint. */
+    &::after {
+      content: '_';
+      visibility: hidden;
+    }
+  }
+
+  .content {
+    white-space: nowrap;
+  }
+
+  .glyph {
+    opacity: 0.72;
+    font-weight: var(--fontWeightRegular);
+    font-family: var(--monoFontStack);
+    color: var(--accent);
+    line-height: 0;
+  }
+
+  .value {
+    opacity: 1;
+  }
+}

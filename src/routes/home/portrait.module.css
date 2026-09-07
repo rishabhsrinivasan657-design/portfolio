@@ -1,0 +1,116 @@
+@layer layout {
+  .frame,
+  .panel {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    justify-self: end;
+
+    @media (--mediaTablet) {
+      justify-self: start;
+      max-width: 360px;
+    }
+  }
+
+  /* The vertical plot hangs off the right edge, the way the reference's
+     decorative type does beside its portrait. */
+  .motif {
+    --motifOpacity: 0.45;
+
+    position: absolute;
+    top: 8%;
+    right: -46px;
+    width: 46px;
+    height: 84%;
+    pointer-events: none;
+
+    /* There is no gutter left for it at this width — it would show as a
+       clipped sliver against the viewport edge rather than a watermark. */
+    @media (--mediaMobile) {
+      display: none;
+    }
+  }
+
+  .panel {
+    aspect-ratio: 3 / 4;
+    border: 1px solid var(--hairline);
+    background: color-mix(in lab, var(--backgroundLight) 60%, transparent);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: 300ms;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 24px),
+      calc(100% - 24px) 100%,
+      0 100%
+    );
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .panelInner {
+    height: 100%;
+    padding: var(--spaceXL);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--spaceXL);
+  }
+
+  .mark {
+    font-family: var(--displayFontStack);
+    font-size: clamp(72px, 14vw, 132px);
+    font-weight: var(--fontWeightBold);
+    letter-spacing: -0.06em;
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 1.5px color-mix(in lab, var(--text) 32%, transparent);
+  }
+
+  .facts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spaceM);
+    margin: 0;
+  }
+
+  .fact {
+    padding-top: var(--spaceS);
+    border-top: 1px solid var(--hairline);
+
+    & dt {
+      font-family: var(--monoFontStack);
+      font-size: var(--fontSizeMonoXS);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    & dd {
+      margin: 0;
+      font-size: var(--fontSizeBodyS);
+      color: var(--textBody);
+      line-height: 1.4;
+    }
+
+    & dd[data-meta] {
+      font-family: var(--monoFontStack);
+      font-size: var(--fontSizeMonoXS);
+      color: var(--textLight);
+      letter-spacing: 0.03em;
+      margin-top: 2px;
+    }
+  }
+}

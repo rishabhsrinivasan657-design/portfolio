@@ -1,0 +1,18 @@
+@layer components {
+  .icon {
+    flex-shrink: 0;
+
+    &[data-mode='stroke'] {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+    }
+
+    &[data-mode='fill'] {
+      fill: currentColor;
+      stroke: none;
+    }
+  }
+}

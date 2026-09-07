@@ -1,0 +1,45 @@
+@layer components {
+  .footer {
+    --lineHeightBody: 1.2;
+
+    width: 100%;
+    padding: var(--space3XL) var(--spaceOuter) var(--space2XL);
+    padding-left: calc(var(--space4XL) * 2);
+    z-index: var(--zIndex2);
+    position: relative;
+    color: var(--textLight);
+
+    @media (min-width: 2081px) {
+      padding-left: var(--space5XL);
+    }
+
+    @media (--mediaTablet) {
+      padding-left: calc(var(--space4XL) + var(--space3XL));
+    }
+
+    @media (--mediaMobile), (--mediaMobileLS) {
+      padding-left: var(--spaceOuter);
+      padding-right: var(--spaceOuter);
+    }
+  }
+
+  .rule {
+    height: 1px;
+    background: var(--hairline);
+    margin-bottom: var(--spaceL);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spaceM) var(--spaceXL);
+  }
+
+  .item {
+    font-size: var(--fontSizeMonoXS);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}

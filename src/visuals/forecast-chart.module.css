@@ -1,0 +1,221 @@
+@layer components {
+  .chart {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+
+    text {
+      font-family: var(--monoFontStack);
+      letter-spacing: 0.12em;
+    }
+  }
+
+  .grid {
+    stroke: var(--hairline);
+    stroke-width: 1;
+    stroke-dasharray: 2 8;
+  }
+
+  .axis {
+    stroke: color-mix(in lab, var(--text) 32%, transparent);
+    stroke-width: 1;
+  }
+
+  .tick {
+    stroke: color-mix(in lab, var(--text) 22%, transparent);
+    stroke-width: 1;
+  }
+
+  @keyframes drawLine {
+    0% {
+      stroke-dashoffset: 100;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .history {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+
+    .chart[data-visible='true'] & {
+      animation: drawLine 1.8s var(--bezierPrecision) 300ms forwards;
+    }
+
+    @media (--mediaReduceMotion) {
+      stroke-dashoffset: 0;
+
+      .chart[data-visible='true'] & {
+        animation: none;
+      }
+    }
+  }
+
+  .forecast {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+
+    .chart[data-visible='true'] & {
+      animation: drawLine 1.2s var(--bezierPrecision) 1500ms forwards;
+    }
+
+    @media (--mediaReduceMotion) {
+      stroke-dashoffset: 0;
+
+      .chart[data-visible='true'] & {
+        animation: none;
+      }
+    }
+  }
+
+  .band {
+    fill: color-mix(in lab, var(--signal) 16%, transparent);
+    stroke: none;
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 1700ms;
+
+    .chart[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .split {
+    stroke: color-mix(in lab, var(--text) 40%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    opacity: 0;
+    transition: opacity var(--durationL) ease 1400ms;
+
+    .chart[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .splitDot {
+    fill: var(--signal);
+    opacity: 0;
+    transition: opacity var(--durationL) ease 1400ms;
+
+    .chart[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .splitLabel,
+  .splitLabelRight,
+  .axisLabel,
+  .axisLabelEnd {
+    font-size: 11px;
+    fill: var(--textLight);
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 1600ms;
+
+    .chart[data-visible='true'] & {
+      opacity: 1;
+    }
+
+    /* The SVG scales down with the container, so these have to grow in
+       viewBox units to stay readable on a phone. */
+    @media (--mediaTablet) {
+      font-size: 17px;
+    }
+
+    @media (--mediaMobile) {
+      font-size: 24px;
+    }
+  }
+
+  .splitLabel {
+    text-anchor: end;
+    fill: var(--primary);
+  }
+
+  .splitLabelRight {
+    text-anchor: start;
+    fill: var(--signal);
+  }
+
+  .axisLabelEnd {
+    text-anchor: end;
+  }
+
+  .caption {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in lab, var(--text) 45%, transparent);
+  }
+
+  /* ---- HTML legend ------------------------------------------------------- */
+
+  .figure {
+    margin: 0;
+    width: 100%;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--spaceS) var(--spaceL);
+    margin-top: var(--spaceM);
+    padding-top: var(--spaceM);
+    border-top: 1px solid var(--hairline);
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 1600ms;
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+  }
+
+  .keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spaceL);
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spaceS);
+      font-family: var(--monoFontStack);
+      font-size: var(--fontSizeMonoXS);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--textLight);
+
+      &::before {
+        content: '';
+        width: 20px;
+        height: 8px;
+        flex-shrink: 0;
+      }
+
+      &[data-key='history']::before {
+        background: var(--primary);
+      }
+
+      &[data-key='forecast']::before {
+        background: var(--signal);
+      }
+
+      &[data-key='interval']::before {
+        background: color-mix(in lab, var(--signal) 30%, transparent);
+        border: 1px solid color-mix(in lab, var(--signal) 50%, transparent);
+      }
+    }
+  }
+}

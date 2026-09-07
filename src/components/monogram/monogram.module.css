@@ -1,0 +1,45 @@
+@layer components {
+  .monogram {
+    overflow: visible;
+  }
+
+  .base,
+  .highlight {
+    fill: none;
+    stroke-width: 3.4;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  .base {
+    stroke: var(--textTitle);
+    transition: stroke var(--durationL) ease;
+  }
+
+  .highlight {
+    stroke: var(--accent);
+    opacity: 0;
+    transition: opacity 0.1s ease var(--durationM);
+
+    :is(a:hover, a:focus-visible, .monogram:hover) & {
+      opacity: 1;
+      transition: opacity 0.1s ease;
+    }
+  }
+
+  /* The mask rect is what actually wipes; scaling it leaves the stroke
+     weight of the letterforms untouched. */
+  .maskRect {
+    transform: scale3d(1, 0, 1);
+    transform-origin: top;
+
+    @media (--mediaUseMotion) {
+      transition: transform var(--durationM) var(--bezierFastoutSlowin);
+    }
+
+    :is(a:hover, a:focus-visible, .monogram:hover) & {
+      transform: scale3d(1, 1, 1);
+      transform-origin: bottom;
+    }
+  }
+}

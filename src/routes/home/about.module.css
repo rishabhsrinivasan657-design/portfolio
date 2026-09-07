@@ -1,0 +1,143 @@
+@layer layout {
+  .about {
+    width: 100%;
+    padding-top: var(--space5XL);
+    padding-bottom: var(--space5XL);
+    position: relative;
+    z-index: var(--zIndex1);
+
+    @media (--mediaTablet) {
+      padding-top: var(--space4XL);
+      padding-bottom: var(--space4XL);
+    }
+  }
+
+  .content {
+    max-width: var(--maxWidthL);
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: var(--space4XL);
+    align-items: start;
+
+    @media (--mediaLaptop) {
+      grid-template-columns: 1fr 360px;
+      gap: var(--space3XL);
+    }
+
+    @media (--mediaTablet) {
+      grid-template-columns: 100%;
+      gap: var(--space2XL);
+    }
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    /* Portrait first on narrow screens: the panel establishes identity
+       before the reader commits to three paragraphs. */
+    @media (--mediaTablet) {
+      &:last-child {
+        grid-row: 1;
+      }
+    }
+  }
+
+  .title {
+    margin-bottom: var(--spaceXL);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: 200ms;
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .copy {
+    max-width: 62ch;
+    margin-bottom: var(--spaceXL);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: calc(var(--durationM) + var(--delay, 0ms));
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .recognition {
+    margin-top: var(--spaceXL);
+    padding-top: var(--spaceL);
+    border-top: 1px solid var(--hairline);
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 600ms;
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+  }
+
+  .recognitionLabel {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: var(--spaceM);
+  }
+
+  .recognitionList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spaceM);
+  }
+
+  .recognitionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: var(--spaceM);
+    border-left: 2px solid var(--signal);
+    max-width: 62ch;
+    opacity: 0;
+    transition: opacity var(--durationL) ease var(--delay);
+
+    .recognition[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .recognitionTitle {
+    font-size: var(--fontSizeBodyM);
+    font-weight: var(--fontWeightMedium);
+    color: var(--textTitle);
+    line-height: 1.35;
+  }
+
+  .recognitionDetail {
+    font-size: var(--fontSizeBodyXS);
+    color: var(--textLight);
+    line-height: 1.5;
+  }
+}

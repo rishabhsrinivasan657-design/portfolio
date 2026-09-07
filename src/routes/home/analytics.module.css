@@ -1,0 +1,284 @@
+@layer layout {
+  /* A full-bleed slab in the opposite palette. It breaks the scroll rhythm
+     deliberately: the analysis is the part of the site that should feel like
+     a different room. */
+  .analytics {
+    width: 100%;
+    background: var(--background);
+    color: var(--textBody);
+    position: relative;
+    z-index: var(--zIndex2);
+    margin: var(--space5XL) 0;
+    transition: background var(--durationM) ease;
+
+    @media (--mediaTablet) {
+      margin: var(--space3XL) 0;
+    }
+  }
+
+  .inner {
+    padding-top: var(--space5XL);
+    padding-bottom: var(--space5XL);
+
+    @media (--mediaTablet) {
+      padding-top: var(--space4XL);
+      padding-bottom: var(--space4XL);
+    }
+  }
+
+  .content {
+    max-width: var(--maxWidthL);
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .header {
+    margin-bottom: var(--space3XL);
+  }
+
+  .title {
+    max-width: 20ch;
+    margin-bottom: var(--spaceL);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--durationM);
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* Forced line breaks on wide screens; on mobile the spans go inline so the
+     natural space between sentences survives the reflow. A <br> cannot do
+     this — hiding it removes the break AND the space. */
+  .line {
+    display: block;
+
+    @media (--mediaTablet) {
+      display: inline;
+    }
+  }
+
+  .lede {
+    max-width: 62ch;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--durationL);
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceL), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* ---- Chart ------------------------------------------------------------- */
+
+  .chart {
+    width: 100%;
+    margin-bottom: var(--space3XL);
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 200ms;
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+  }
+
+  .chartFallback {
+    width: 100%;
+    aspect-ratio: 900 / 336;
+  }
+
+  /* ---- Lower grid -------------------------------------------------------- */
+
+  .lower {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--space3XL);
+    align-items: start;
+    padding-top: var(--space2XL);
+    border-top: 1px solid var(--hairline);
+
+    @media (--mediaTablet) {
+      grid-template-columns: 100%;
+      gap: var(--space2XL);
+    }
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space2XL) var(--spaceXL);
+
+    @media (--mediaMobile) {
+      grid-template-columns: 100%;
+      gap: var(--spaceXL);
+    }
+  }
+
+  .step {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: var(--delay);
+    padding-left: var(--spaceM);
+    border-left: 1px solid var(--hairline);
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceM), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .stepIndex {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    letter-spacing: 0.14em;
+    color: var(--primary);
+  }
+
+  .stepLabel {
+    font-family: var(--displayFontStack);
+    font-size: var(--fontSizeH5);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: -0.02em;
+    color: var(--textTitle);
+    margin: var(--spaceXS) 0 var(--spaceS);
+  }
+
+  .stepDetail {
+    font-size: var(--fontSizeBodyS);
+    line-height: var(--lineHeightBody);
+    color: var(--textBody);
+    margin: 0;
+    max-width: 40ch;
+  }
+
+  /* ---- Validation aside -------------------------------------------------- */
+
+  .validation {
+    opacity: 0;
+    transition: opacity var(--durationXL) ease 800ms;
+    border: 1px solid var(--hairline);
+    padding: var(--spaceL);
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+  }
+
+  .validationTitle {
+    font-family: var(--monoFontStack);
+    font-size: var(--fontSizeMonoXS);
+    font-weight: var(--fontWeightMedium);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: var(--spaceS);
+  }
+
+  .validationCopy {
+    font-size: var(--fontSizeBodyXS);
+    line-height: 1.55;
+    color: var(--textBody);
+    margin: 0 0 var(--spaceL);
+  }
+
+  .windows {
+    width: 100%;
+    height: auto;
+    margin-bottom: var(--spaceM);
+  }
+
+  .train,
+  .test {
+    transform-box: fill-box;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform var(--durationL) var(--bezierPrecision) var(--delay);
+
+    .validation[data-visible='true'] & {
+      transform: none;
+    }
+  }
+
+  .train {
+    fill: color-mix(in lab, var(--primary) 45%, transparent);
+  }
+
+  .test {
+    fill: var(--signal);
+  }
+
+  .windowsKey {
+    display: flex;
+    gap: var(--spaceL);
+    font-family: var(--monoFontStack);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--textLight);
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      &::before {
+        content: '';
+        width: 10px;
+        height: 4px;
+      }
+
+      &[data-kind='train']::before {
+        background: color-mix(in lab, var(--primary) 45%, transparent);
+      }
+
+      &[data-kind='test']::before {
+        background: var(--signal);
+      }
+    }
+  }
+
+  /* ---- Action ------------------------------------------------------------ */
+
+  .action {
+    margin-top: var(--space3XL);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationXL);
+    transition-timing-function: var(--bezierFastoutSlowin);
+    transition-delay: 1s;
+
+    @media (--mediaUseMotion) {
+      transition-property: transform, opacity;
+      transform: translate3d(0, var(--spaceM), 0);
+    }
+
+    &[data-visible='true'] {
+      transform: none;
+      opacity: 1;
+    }
+  }
+}

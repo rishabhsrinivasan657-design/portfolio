@@ -1,0 +1,30 @@
+@layer components {
+  /* Fixed, so the environment persists behind the whole page rather than
+     scrolling away with the hero. */
+  .canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 3s;
+    transition-timing-function: var(--bezierFastoutSlowin);
+    pointer-events: none;
+    z-index: var(--zIndex0);
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+
+    /* Past the hero it becomes atmosphere. Body copy has to win. */
+    &[data-visible='true'][data-dimmed='true'] {
+      opacity: 0.22;
+      transition-duration: var(--durationXL);
+    }
+
+    @media (--mediaReduceMotion) {
+      transition-duration: 0.6s;
+    }
+  }
+}

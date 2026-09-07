@@ -1,0 +1,60 @@
+/*
+ * Plain CSS, not a CSS Module — see the note in `reset.css`.
+ *
+ * Shared keyframes deliberately live inside the modules that use them.
+ * CSS Modules rewrites `animation-name` to a hashed local name, so a module
+ * referencing a keyframe declared in a global file animates a name that does
+ * not exist — silently, and only the animation fails.
+ */
+@layer base {
+  :root {
+    --mobileNavOffset: calc(var(--spaceOuter) * 2 + var(--space2XL));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  html,
+  body {
+    font-family: var(--fontStack);
+    font-weight: var(--fontWeightRegular);
+    background-color: var(--background);
+    transition: var(--durationM) ease;
+    transition-property: background, opacity;
+    color: var(--textBody);
+    width: 100%;
+    overflow-x: hidden;
+    opacity: 1;
+  }
+
+  html:focus,
+  body:focus {
+    outline: none;
+  }
+
+  :where(code, pre, kbd, samp) {
+    font-family: var(--monoFontStack);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--background);
+  }
+
+  :focus {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+}

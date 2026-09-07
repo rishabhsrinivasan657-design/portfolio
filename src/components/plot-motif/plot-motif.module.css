@@ -1,0 +1,54 @@
+@layer components {
+  .motif {
+    opacity: 0;
+    transition: opacity 1200ms ease 1400ms;
+    overflow: visible;
+    vector-effect: non-scaling-stroke;
+
+    &[data-visible='true'] {
+      opacity: var(--motifOpacity, 1);
+    }
+  }
+
+  .axis,
+  .tick,
+  .grid,
+  .series {
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .axis {
+    stroke: color-mix(in lab, var(--textTitle) 55%, transparent);
+    stroke-width: 1.5;
+  }
+
+  .tick {
+    stroke: color-mix(in lab, var(--textTitle) 30%, transparent);
+    stroke-width: 1.5;
+
+    &[data-major='true'] {
+      stroke: color-mix(in lab, var(--textTitle) 50%, transparent);
+    }
+  }
+
+  .grid {
+    stroke: color-mix(in lab, var(--textTitle) 12%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 2 8;
+  }
+
+  .series {
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+  .node {
+    fill: var(--background);
+    stroke: var(--accent);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+}

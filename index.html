@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--
+      Cascade layer order, declared before any stylesheet loads.
+
+      This has to live here rather than in the injected theme styles: layer
+      precedence is fixed by the order layers are FIRST seen, and both Vite's
+      dev-time style injection and the production stylesheet land after any
+      JS-appended <style>. Declaring it late would let the reset's
+      `:where(*) { margin: 0 }` outrank component rules, because layer order
+      beats specificity.
+    -->
+    <style>
+      @layer theme, base, components, layout;
+    </style>
+
+    <title>Rishabh Srinivasan — Engineer</title>
+    <meta
+      name="description"
+      content="Rishabh Srinivasan builds the systems between a business question and the answer — data pipelines, forecasting models and multi-agent AI. M.S. Information Systems &amp; AI, University of Maryland."
+    />
+    <meta name="author" content="Rishabh Srinivasan" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Rishabh Srinivasan — Engineer" />
+    <meta
+      property="og:description"
+      content="Data pipelines, forecasting models and multi-agent AI. M.S. Information Systems &amp; AI, University of Maryland."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!--
+      Resolve the theme before first paint. Without this the page renders in
+      the default theme for a frame and then snaps, which is the single most
+      visible way a site can look unfinished.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersLight =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: light)').matches;
+          var theme = stored || (prefersLight ? 'light' : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.style.backgroundColor =
+            theme === 'light' ? '#f1f3f6' : '#0c1116';
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.style.backgroundColor = '#0c1116';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+@layer components {
+  .pipeline {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+
+    text {
+      font-family: var(--monoFontStack);
+      letter-spacing: 0.09em;
+    }
+  }
+
+  /* ---- Stages ------------------------------------------------------------ */
+
+  .stage {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationL);
+    transition-timing-function: var(--bezierPrecision);
+    transition-delay: var(--delay);
+
+    @media (--mediaUseMotion) {
+      transition-property: opacity, transform;
+      transform: translate3d(0, 14px, 0);
+    }
+
+    .pipeline[data-visible='true'] & {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .stageBox {
+    fill: var(--backgroundLight);
+    stroke: var(--hairline);
+    stroke-width: 1;
+
+    .stage[data-emphasis='true'] & {
+      stroke: var(--accent);
+      stroke-width: 1.5;
+    }
+  }
+
+  .stageIndex {
+    fill: var(--primary);
+    font-size: 11px;
+  }
+
+  .stageLabel {
+    fill: var(--textTitle);
+    font-size: 12px;
+    font-weight: var(--fontWeightMedium);
+  }
+
+  .stageSub {
+    fill: var(--textLight);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- Record fields ----------------------------------------------------- */
+
+  .fieldLabel {
+    fill: var(--textLight);
+    font-size: 9px;
+  }
+
+  /* Deliberately blank bars: the shape of a record, not invented contents. */
+  .fieldBar {
+    fill: color-mix(in lab, var(--primary) 30%, transparent);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform var(--durationL) var(--bezierPrecision) var(--delay);
+
+    .pipeline[data-visible='true'] & {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ---- Flow -------------------------------------------------------------- */
+
+  .link {
+    stroke: color-mix(in lab, var(--primary) 30%, transparent);
+    stroke-width: 1;
+  }
+
+  .fork {
+    fill: none;
+    stroke: color-mix(in lab, var(--primary) 30%, transparent);
+    stroke-width: 1;
+  }
+
+  .arrow {
+    fill: none;
+    stroke: color-mix(in lab, var(--primary) 55%, transparent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @keyframes flowPulse {
+    0% {
+      stroke-dashoffset: 106;
+      opacity: 0;
+    }
+
+    15% {
+      opacity: 1;
+    }
+
+    85% {
+      opacity: 1;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  .pulse {
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 14 100;
+    stroke-dashoffset: 106;
+    opacity: 0;
+
+    .pipeline[data-visible='true'] & {
+      animation: flowPulse 2.6s linear var(--delay) infinite;
+    }
+
+    @media (--mediaReduceMotion) {
+      .pipeline[data-visible='true'] & {
+        animation: none;
+      }
+    }
+  }
+
+  /* ---- Source ------------------------------------------------------------ */
+
+  .source,
+  .outcomes,
+  .stack {
+    opacity: 0;
+    transition: opacity var(--durationXL) ease var(--delay);
+
+    .pipeline[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .sourceBox {
+    fill: none;
+    stroke: var(--hairline);
+    stroke-width: 1;
+  }
+
+  .sourceLabel {
+    fill: var(--textBody);
+    font-size: 11px;
+  }
+
+  .sourceSub {
+    fill: var(--textLight);
+    font-size: 9px;
+  }
+
+  .sourceEdge {
+    stroke: color-mix(in lab, var(--primary) 32%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+  }
+
+  /* ---- Outcomes ---------------------------------------------------------- */
+
+  .outcomeBox {
+    fill: none;
+    stroke: var(--hairline);
+    stroke-width: 1;
+
+    &[data-flag] {
+      stroke: var(--signal);
+    }
+  }
+
+  .outcomeLabel {
+    fill: var(--textLight);
+    font-size: 10px;
+
+    &[data-flag] {
+      fill: var(--signal);
+    }
+  }
+
+  /* ---- Stack strip ------------------------------------------------------- */
+
+  .stackRule {
+    stroke: var(--hairline);
+    stroke-width: 1;
+  }
+
+  .stackLabel {
+    fill: var(--textLight);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+}

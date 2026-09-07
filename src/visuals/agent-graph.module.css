@@ -1,0 +1,240 @@
+@layer components {
+  .graph {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+
+    text {
+      font-family: var(--monoFontStack);
+      text-anchor: middle;
+      letter-spacing: 0.1em;
+    }
+  }
+
+  /* ---- Scaffolding ------------------------------------------------------- */
+
+  .ring,
+  .ringInner {
+    fill: none;
+    stroke: var(--hairline);
+    stroke-width: 1;
+    stroke-dasharray: 2 7;
+    opacity: 0;
+    transform-origin: center;
+    transition: opacity var(--durationXL) ease 200ms;
+
+    .graph[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .ringInner {
+    stroke-dasharray: 1 9;
+    transition-delay: 400ms;
+  }
+
+  /* ---- Edges ------------------------------------------------------------- */
+
+  .edge {
+    stroke: color-mix(in lab, var(--primary) 32%, transparent);
+    stroke-width: 1;
+    opacity: 0;
+    transition: opacity var(--durationL) ease var(--delay);
+
+    .graph[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulseTravel {
+    0% {
+      stroke-dashoffset: 106;
+      opacity: 0;
+    }
+
+    12% {
+      opacity: 1;
+    }
+
+    88% {
+      opacity: 1;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  /* A short dash travelling the length of each edge reads as a message in
+     flight without needing a particle system. */
+  .pulse {
+    stroke: var(--accent);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 6 100;
+    stroke-dashoffset: 106;
+    opacity: 0;
+
+    &[data-evaluation='true'] {
+      stroke: var(--signal);
+    }
+
+    .graph[data-visible='true'] & {
+      animation: pulseTravel 2.8s linear var(--delay) infinite;
+    }
+
+    @media (--mediaReduceMotion) {
+      .graph[data-visible='true'] & {
+        animation: none;
+      }
+    }
+  }
+
+  @keyframes feedbackDraw {
+    0% {
+      stroke-dashoffset: 100;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .feedback {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 1.5;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    opacity: 0.75;
+
+    .graph[data-visible='true'] & {
+      animation: feedbackDraw 1.6s var(--bezierPrecision) 1400ms forwards;
+    }
+
+    @media (--mediaReduceMotion) {
+      .graph[data-visible='true'] & {
+        stroke-dashoffset: 0;
+        animation: none;
+      }
+    }
+  }
+
+  /* ---- Nodes ------------------------------------------------------------- */
+
+  .node {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationL);
+    transition-timing-function: var(--bezierPrecision);
+    transition-delay: var(--delay);
+    transform-box: fill-box;
+    transform-origin: center;
+
+    @media (--mediaUseMotion) {
+      transition-property: opacity, transform;
+      transform: scale(0.7);
+    }
+
+    .graph[data-visible='true'] & {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .nodeHalo {
+    fill: color-mix(in lab, var(--primary) 10%, transparent);
+    stroke: none;
+
+    .node[data-evaluation='true'] & {
+      fill: color-mix(in lab, var(--signal) 14%, transparent);
+    }
+  }
+
+  .nodeDot {
+    fill: var(--background);
+    stroke: var(--primary);
+    stroke-width: 1.5;
+
+    .node[data-evaluation='true'] & {
+      stroke: var(--signal);
+      stroke-width: 2;
+    }
+  }
+
+  .nodeIndex {
+    fill: var(--textLight);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .nodeLabel {
+    fill: var(--textBody);
+    font-size: 11px;
+    text-transform: uppercase;
+
+    &[data-evaluation='true'] {
+      fill: var(--signal);
+    }
+  }
+
+  /* ---- Core -------------------------------------------------------------- */
+
+  .core {
+    opacity: 0;
+    transition: opacity var(--durationXL) ease var(--delay);
+
+    .graph[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  /* The chamfered corner is drawn into the path itself — same 10px cut the
+     buttons use. */
+  .coreBox {
+    fill: var(--backgroundLight);
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+
+  .coreLabel {
+    fill: var(--textTitle);
+    font-size: 11px;
+    font-weight: var(--fontWeightMedium);
+  }
+
+  .coreSub {
+    fill: var(--textLight);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ---- Sources ----------------------------------------------------------- */
+
+  .source {
+    opacity: 0;
+    transition: opacity var(--durationL) ease var(--delay);
+
+    .graph[data-visible='true'] & {
+      opacity: 1;
+    }
+  }
+
+  .sourceEdge {
+    stroke: color-mix(in lab, var(--primary) 26%, transparent);
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+  }
+
+  .sourceBox {
+    fill: none;
+    stroke: var(--hairline);
+    stroke-width: 1;
+  }
+
+  .sourceLabel {
+    fill: var(--textLight);
+    font-size: 10px;
+  }
+}
