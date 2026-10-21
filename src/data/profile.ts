@@ -233,8 +233,8 @@ export const projects: Project[] = [
     ],
     repo: 'https://github.com/rishabhsrinivasan657-design/reconcile',
     film: {
-      src: 'projects/reconcile/reconcile-film.mp4',
-      poster: 'projects/reconcile/reconcile-poster.jpg',
+      src: 'media/reconcile/reconcile-film.mp4',
+      poster: 'media/reconcile/reconcile-poster.jpg',
       label:
         'A 23-second product film of Reconcile: $49,245.07 at risk, three documents matched, a price gap of $3.78 per case flagged on an invoice, and the problem written off with a note. It closes on 99.8% of fields read correctly, 100% of planted problems found, and $0 to run.',
     },
