@@ -326,6 +326,12 @@ export const projects: Project[] = [
       { value: 'FDA', label: 'datasets behind interaction checks' },
       { value: 'CI/CD', label: 'containerised and automated' },
     ],
+    film: {
+      src: 'media/medbuddy/medbuddy-film.mp4',
+      poster: 'media/medbuddy/medbuddy-poster.jpg',
+      label:
+        'A 21-second product film of MedBuddy: a dose reminder, a prescription label scanned and its form filled in at 97% confidence, a question about taking lisinopril with ibuprofen answered with an FDA monograph citation, and a dashboard showing 96% adherence as a dose is logged as taken.',
+    },
   },
   {
     id: 'market-regime',
