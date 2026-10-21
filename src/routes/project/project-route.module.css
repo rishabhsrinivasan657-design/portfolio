@@ -95,6 +95,10 @@
   }
 
   .headerActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spaceM);
+
     @media (--mediaUseMotion) {
       opacity: 0;
       animation: projectFadeSlide 1.4s var(--bezierPrecision)
@@ -224,6 +228,11 @@
   .heroFallback {
     width: 100%;
     aspect-ratio: 1;
+  }
+
+  .heroFilmFallback {
+    width: 100%;
+    aspect-ratio: 16 / 9;
   }
 
   /* ---- Blocks ------------------------------------------------------------ */

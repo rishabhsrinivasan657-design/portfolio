@@ -1,0 +1,18 @@
+@layer components {
+  .film {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    background: var(--backgroundLight);
+    border: 1px solid var(--hairline);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--durationL);
+    transition-timing-function: var(--bezierPrecision);
+
+    &[data-visible='true'] {
+      opacity: 1;
+    }
+  }
+}

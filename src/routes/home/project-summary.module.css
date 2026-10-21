@@ -138,6 +138,11 @@
       opacity: 1;
       transform: none;
     }
+
+    /* A 16:9 film needs more width than a square schematic to stay legible. */
+    &[data-film='true'] {
+      max-width: 760px;
+    }
   }
 
   .visualFrame {
@@ -177,6 +182,11 @@
 
   .visualFallback {
     aspect-ratio: 1;
+    width: 100%;
+  }
+
+  .filmFallback {
+    aspect-ratio: 16 / 9;
     width: 100%;
   }
 

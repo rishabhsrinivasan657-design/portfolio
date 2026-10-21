@@ -38,6 +38,13 @@ export type Project = {
   matters: string;
   stack: string[];
   metrics: Array<{ value: string; label: string }>;
+  /** Public source repository, shown as a button on the case study. */
+  repo?: string;
+  /**
+   * A rendered product film, used in place of a drawn schematic when the
+   * project has a real interface to show. Paths are relative to `public/`.
+   */
+  film?: { src: string; poster: string; label: string };
 };
 
 export const education = [
@@ -168,9 +175,74 @@ export const experience: Experience[] = [
 
 export const projects: Project[] = [
   {
+    id: 'reconcile',
+    slug: 'reconcile',
+    index: '01',
+    title: 'Reconcile',
+    summary:
+      'An AI agent that reads purchase orders, receiving reports and supplier invoices, matches them line by line, and puts a dollar figure on every mismatch.',
+    venue: 'Personal Project · Open Source',
+    period: 'Oct 2026',
+    problem:
+      'Before an invoice is paid, someone has to check it against what was ordered and what actually arrived — the three-way match. Done by hand it is slow, and it misses short-shipments, quiet price increases, duplicate invoices and lines nobody ordered.',
+    approach: [
+      'Read each document — PDF or scan — with an LLM into a typed schema where every field carries a confidence score and the box it was read from, then ran deterministic checks (quantity × price, lines to subtotal, subtotal to total) so a field that fails the arithmetic loses confidence and goes to a human review queue.',
+      'Kept the LLM out of anything a rule can decide. A pure matching engine pairs lines by exact SKU, then by text similarity, and calls the LLM only for the leftovers — and every pair it makes is stored with its reasoning.',
+      'Raised seven problem types (short-ship, over-ship, price variance, billed-not-received, missing document, duplicate invoice, unmatched line), each with an exact dollar impact, for a person to approve, dispute or write off with a required note in an append-only audit log.',
+      'Measured everything against a seeded synthetic generator that plants 12 kinds of error and writes an answer key per document set, with a CI gate that fails any pull request dropping a metric by more than two points.',
+      'Ran it as a gated SDLC over eight milestones — requirements, design, ADRs, test plans and retrospectives — directing Claude Code as the coding agent and approving every gate.',
+    ],
+    build: [
+      'TypeScript monorepo: Fastify REST API with OpenAPI generated from Zod schemas, a BullMQ worker on Redis, and PostgreSQL through Prisma.',
+      'Google Gemini behind a provider interface (LangChain.js), with a shared rate limiter, retries with backoff, a response cache, replay mode for CI and a hard spending cap.',
+      'Next.js review interface: a problem queue sorted by money at risk, the three documents side by side, field highlights drawn on the page image, and live upload status over server-sent events.',
+      'An MCP server with six read-only tools, so Claude can answer questions about open problems — with document text marked as untrusted data against prompt injection.',
+      'Terraform on AWS: EC2 behind CloudFront, secrets in SSM Parameter Store, no SSH, budget alarms, and one-command deploy and teardown.',
+      'Vitest, Playwright and axe for 212 automated tests, plus an eval harness in GitHub Actions.',
+    ],
+    result: [
+      '99.8% field-level F1 reading 60 documents (PDFs and scans) on the CI test set, and 100% of planted problems found with exact dollar amounts end to end.',
+      '$0.0093 per document at Gemini list price, and $0 to run on the free tier.',
+      'Deployed to AWS from a single command, torn down with nothing billable left, and redeployed cleanly.',
+      'Measured on synthetic documents only — no real company data or users.',
+    ],
+    matters:
+      'Accounts payable is a place where a confident wrong answer costs money. The interesting work was deciding what the model should not do: rules handle the arithmetic and the matching, the model reads documents and judges the leftovers, and every claim it makes arrives with a confidence, a source box and a reason a person can check.',
+    stack: [
+      'TypeScript',
+      'Gemini',
+      'LangChain.js',
+      'Fastify',
+      'BullMQ',
+      'Redis',
+      'PostgreSQL',
+      'Prisma',
+      'Next.js',
+      'MCP',
+      'Vitest',
+      'Playwright',
+      'Docker',
+      'Terraform',
+      'AWS',
+      'GitHub Actions',
+    ],
+    metrics: [
+      { value: '99.8%', label: 'of document fields read correctly' },
+      { value: '100%', label: 'of planted problems found' },
+      { value: '$0', label: 'to run on free tiers' },
+    ],
+    repo: 'https://github.com/rishabhsrinivasan657-design/reconcile',
+    film: {
+      src: 'projects/reconcile/reconcile-film.mp4',
+      poster: 'projects/reconcile/reconcile-poster.jpg',
+      label:
+        'A 23-second product film of Reconcile: $49,245.07 at risk, three documents matched, a price gap of $3.78 per case flagged on an invoice, and the problem written off with a note. It closes on 99.8% of fields read correctly, 100% of planted problems found, and $0 to run.',
+    },
+  },
+  {
     id: 'agentic-advisory',
     slug: 'agentic-financial-advisory',
-    index: '01',
+    index: '02',
     title: 'Agentic Financial Advisory System',
     summary:
       'Nine agents coordinating portfolio analysis, risk and compliance — with one whose only job is to disagree with the others.',
@@ -212,7 +284,7 @@ export const projects: Project[] = [
   {
     id: 'medbuddy',
     slug: 'medbuddy',
-    index: '02',
+    index: '03',
     title: 'MedBuddy',
     summary:
       'A medication platform that reads a prescription from a photograph and checks it against the FDA before it reaches a patient.',
@@ -258,7 +330,7 @@ export const projects: Project[] = [
   {
     id: 'market-regime',
     slug: 'market-regime-analysis',
-    index: '03',
+    index: '04',
     title: 'Financial Market Regime Analysis',
     summary:
       'A Databricks pipeline that classifies decades of US economic history into four regimes — built as a scheduled workflow, not a pile of notebooks.',
@@ -299,7 +371,7 @@ export const projects: Project[] = [
   {
     id: 'demand-forecasting',
     slug: 'demand-forecasting',
-    index: '04',
+    index: '05',
     title: 'Demand Forecasting & Revenue Analytics',
     summary:
       '50,000 e-commerce records, three forecasting models scored head to head, and a 60-day revenue forecast a planner can actually use.',
@@ -405,10 +477,13 @@ export const skillGroups = [
       'JavaScript',
       'C++',
       'C',
+      'TypeScript',
       'React',
+      'Next.js',
       'AngularJS',
       'Node.js',
       'Spring Boot',
+      'Fastify',
       'Docker',
       'Git',
       'IntelliJ',
@@ -449,7 +524,8 @@ export const skillGroups = [
       'Airflow',
       'Kafka',
       'SAP',
-      'AWS (Lambda, S3)',
+      'AWS (Lambda, S3, EC2, CloudFront)',
+      'Terraform',
       'Google Cloud',
       'Azure',
       'Power Automate',
@@ -463,7 +539,7 @@ export const skillGroups = [
 
 /** Featured on the home page, in scroll order. */
 export const featuredProjects = projects.filter(project =>
-  ['agentic-advisory', 'medbuddy', 'market-regime'].includes(project.id)
+  ['reconcile', 'agentic-advisory', 'medbuddy', 'market-regime'].includes(project.id)
 );
 
 export const analyticsProject = projects.find(

@@ -25,6 +25,9 @@ const MedallionRegimes = lazy(() =>
 const ForecastChart = lazy(() =>
   import('~/visuals/forecast-chart').then(m => ({ default: m.ForecastChart }))
 );
+const ProjectFilm = lazy(() =>
+  import('~/visuals/project-film').then(m => ({ default: m.ProjectFilm }))
+);
 
 const VISUALS: Record<
   string,
@@ -96,6 +99,17 @@ export const ProjectRoute = () => {
               <Button secondary iconHoverShift icon="arrow-left" href="/#project-1">
                 All work
               </Button>
+              {project.repo && (
+                <Button
+                  secondary
+                  icon="github"
+                  href={project.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View the code
+                </Button>
+              )}
             </div>
           </div>
 
@@ -116,14 +130,23 @@ export const ProjectRoute = () => {
 
       {/* ---- Hero schematic ---- */}
       <Section className={styles.heroSection}>
-        <div className={styles.hero} data-wide={visual?.wide} data-visible={heroVisible}>
+        <div
+          className={styles.hero}
+          data-wide={Boolean(project.film) || visual?.wide}
+          data-visible={heroVisible}
+        >
           <PlotMotif className={styles.heroMotif} visible={heroVisible} />
           <div className={styles.heroFrame}>
             <div className={styles.heroMeta} aria-hidden>
-              <span>System schematic</span>
+              <span>{project.film ? 'Product film' : 'System schematic'}</span>
               <span>{project.index}</span>
             </div>
-            {Visual && (
+            {project.film && (
+              <Suspense fallback={<div className={styles.heroFilmFallback} />}>
+                <ProjectFilm film={project.film} visible={heroVisible} />
+              </Suspense>
+            )}
+            {!project.film && Visual && (
               <Suspense fallback={<div className={styles.heroFallback} />}>
                 <Visual visible={heroVisible} />
               </Suspense>

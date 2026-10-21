@@ -20,6 +20,9 @@ const MedPipeline = lazy(() =>
 const MedallionRegimes = lazy(() =>
   import('~/visuals/medallion-regimes').then(m => ({ default: m.MedallionRegimes }))
 );
+const ProjectFilm = lazy(() =>
+  import('~/visuals/project-film').then(m => ({ default: m.ProjectFilm }))
+);
 
 const VISUALS: Record<string, React.LazyExoticComponent<(props: { visible?: boolean }) => JSX.Element>> = {
   'agentic-advisory': AgentGraph,
@@ -39,7 +42,8 @@ type ProjectSummaryProps = {
 /**
  * A full-viewport project staging: metadata and copy on one side, an
  * animated schematic of the system on the other. The schematic is drawn from
- * the project's own architecture — there are no screenshots to fake.
+ * the project's own architecture — there are no screenshots to fake. A
+ * project with a real interface shows its rendered product film instead.
  */
 export function ProjectSummary({
   id,
@@ -113,13 +117,18 @@ export function ProjectSummary({
           visible={visible}
           data-alternate={alternate}
         />
-        <div className={styles.visual} data-visible={visible}>
+        <div className={styles.visual} data-visible={visible} data-film={Boolean(project.film)}>
           <div className={styles.visualFrame}>
             <div className={styles.visualMeta} aria-hidden>
               <span>{project.venue}</span>
               <span>{project.period}</span>
             </div>
-            {Visual && (
+            {project.film && (
+              <Suspense fallback={<div className={styles.filmFallback} />}>
+                <ProjectFilm film={project.film} visible={visible} />
+              </Suspense>
+            )}
+            {!project.film && Visual && (
               <Suspense fallback={<div className={styles.visualFallback} />}>
                 <Visual visible={visible} />
               </Suspense>

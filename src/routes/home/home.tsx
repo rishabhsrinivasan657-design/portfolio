@@ -20,13 +20,14 @@ export const Home = () => {
   const projectOne = useRef<HTMLElement>(null);
   const projectTwo = useRef<HTMLElement>(null);
   const projectThree = useRef<HTMLElement>(null);
+  const projectFour = useRef<HTMLElement>(null);
   const analytics = useRef<HTMLElement>(null);
   const skills = useRef<HTMLElement>(null);
   const about = useRef<HTMLElement>(null);
   const moreWork = useRef<HTMLElement>(null);
   const contact = useRef<HTMLElement>(null);
 
-  const projectRefs = [projectOne, projectTwo, projectThree];
+  const projectRefs = [projectOne, projectTwo, projectThree, projectFour];
 
   useEffect(() => {
     const sections = [
@@ -35,6 +36,7 @@ export const Home = () => {
       projectOne,
       projectTwo,
       projectThree,
+      projectFour,
       analytics,
       skills,
       about,
