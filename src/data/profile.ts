@@ -240,9 +240,70 @@ export const projects: Project[] = [
     },
   },
   {
+    id: 'citibike',
+    slug: 'citibike-rebalancing',
+    index: '02',
+    title: 'Citi Bike Rebalancing',
+    summary:
+      'A data platform that records every Citi Bike station in New York every minute, predicts which will run out in the next hour, and plans where vans should move bikes.',
+    venue: 'Personal Project · Open Source',
+    period: 'Oct 2026 — Nov 2026',
+    problem:
+      'Every weekday morning, Midtown stations fill up so commuters cannot dock while others run out of bikes. Lyft pays crews to move bikes by van, but deciding which stations to fix first needs live counts, a forecast of the next hour and a plan that respects van capacity and drive times.',
+    approach: [
+      'Recorded the live feed (GBFS) for every station every minute, storing only changes plus a 15-minute heartbeat, on free GitHub Actions runs that start their own successor after the scheduler skipped runs one night.',
+      'Built the warehouse in dbt on DuckDB: deduplicated trips with proper time zones, station history as SCD2, bikes at every station every minute, and Lyft van visits inferred from the minute data, guarded by 31 data tests and freshness checks.',
+      'Trained a Poisson gradient-boosting model of pickups and returns per station per hour, with an approval gate so a model is only used if it beats 12-month averages on a held-out month.',
+      'Planned van moves as an integer program (one pickup, up to four drop-offs per trip, van capacity, dock limits, drive times on the rotated street grid) and checked every plan with an independent verifier.',
+      'Verified the planner by replaying recorded mornings minute by minute, with a check that the replay of what actually happened reproduces the recording exactly.',
+    ],
+    build: [
+      'Python recorder on GitHub Actions writing a Parquet lake to Hugging Face; a Redpanda (Kafka) + Docker version for local streaming.',
+      'dbt + DuckDB warehouse with 45M historical trips, hourly weather and holidays.',
+      'scikit-learn demand model; PuLP / CBC planner solving Midtown in under a second.',
+      'Streamlit app with a live map of at-risk stations and the van move list.',
+      'An MCP server over a versioned knowledge bundle, so Claude answers questions with approved, attested metrics.',
+      '117 automated tests, plus weekly verification and daily coverage jobs.',
+    ],
+    result: [
+      '14% fewer riders left without a bike or a dock than with no vans, replayed on 10 recorded weekday mornings in Midtown (8–9am). An estimate, not a field trial.',
+      '99.9% of minutes recorded by the self-relaying recorder, for $0 a month.',
+      'Every replay reproduces the recorded bike counts exactly before any what-if is applied.',
+      'The comparison is against no detected van moves; it does not show the plan beats Lyft, whose smaller moves the detector cannot see.',
+    ],
+    matters:
+      'The interesting part was making a claim the data could defend. A recorder that cannot miss minutes, a replay that must match reality to the bike, and a model that has to earn its place against simple averages are what turn a nice map into a result.',
+    stack: [
+      'Python',
+      'GitHub Actions',
+      'Hugging Face',
+      'Parquet',
+      'dbt',
+      'DuckDB',
+      'scikit-learn',
+      'PuLP',
+      'Streamlit',
+      'Kafka',
+      'Docker',
+      'MCP',
+    ],
+    metrics: [
+      { value: '14%', label: 'fewer riders miss out (10 replayed mornings)' },
+      { value: '99.9%', label: 'of minutes recorded' },
+      { value: '$0', label: 'a month to run' },
+    ],
+    repo: 'https://github.com/rishabhsrinivasan657-design/citibike-rebalancing',
+    film: {
+      src: 'media/citibike/citibike-film.mp4',
+      poster: 'media/citibike/citibike-poster.jpg',
+      label:
+        'A 23-second product film of the Citi Bike van planner: 2,372 riders left without a bike or a dock across 10 recorded Midtown mornings, the five-stage pipeline that records every station every minute, the live app planning four van moves that cut riders missing out from 51 to 44, and the proof: 14% fewer riders miss out, every replay matches the recording, and 99.9% of minutes recorded.',
+    },
+  },
+  {
     id: 'agentic-advisory',
     slug: 'agentic-financial-advisory',
-    index: '02',
+    index: '03',
     title: 'Agentic Financial Advisory System',
     summary:
       'Nine agents coordinating portfolio analysis, risk and compliance — with one whose only job is to disagree with the others.',
@@ -284,7 +345,7 @@ export const projects: Project[] = [
   {
     id: 'medbuddy',
     slug: 'medbuddy',
-    index: '03',
+    index: '04',
     title: 'MedBuddy',
     summary:
       'A medication platform that reads a prescription from a photograph and checks it against the FDA before it reaches a patient.',
@@ -336,7 +397,7 @@ export const projects: Project[] = [
   {
     id: 'market-regime',
     slug: 'market-regime-analysis',
-    index: '04',
+    index: '05',
     title: 'Financial Market Regime Analysis',
     summary:
       'A Databricks pipeline that classifies decades of US economic history into four regimes — built as a scheduled workflow, not a pile of notebooks.',
@@ -377,7 +438,7 @@ export const projects: Project[] = [
   {
     id: 'demand-forecasting',
     slug: 'demand-forecasting',
-    index: '05',
+    index: '06',
     title: 'Demand Forecasting & Revenue Analytics',
     summary:
       '50,000 e-commerce records, three forecasting models scored head to head, and a 60-day revenue forecast a planner can actually use.',
@@ -545,7 +606,7 @@ export const skillGroups = [
 
 /** Featured on the home page, in scroll order. */
 export const featuredProjects = projects.filter(project =>
-  ['reconcile', 'agentic-advisory', 'medbuddy', 'market-regime'].includes(project.id)
+  ['reconcile', 'citibike', 'agentic-advisory', 'medbuddy', 'market-regime'].includes(project.id)
 );
 
 export const analyticsProject = projects.find(
